@@ -1,0 +1,48 @@
+.delete-button {
+  position: absolute;
+  top: -3px;
+  right: -30px;
+  width: 25px;
+  height: 25px;
+
+  background-color: var(--secondary-btn-color);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.delete-logo {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-button__one {
+  position: absolute;
+  transform: rotateZ(50deg);
+
+  width: 15px;
+  height: 4px;
+  background-color: var(--main-white-color);
+  border-radius: 4px;
+}
+
+.delete-button__two {
+  position: absolute;
+  transform: rotateZ(-50deg);
+
+  width: 15px;
+  height: 4px;
+  background-color: var(--main-white-color);
+  border-radius: 4px;
+}
+
+.delete-button:hover {
+  /* background-color: var(--third-btn-color); */
+  background-image: linear-gradient(135deg, #3c8ce7 10%, #00eaff 100%);
+}
