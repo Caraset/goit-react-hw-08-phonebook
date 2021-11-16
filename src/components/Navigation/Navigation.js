@@ -5,7 +5,8 @@ export default function Navigation() {
   return (
     <div>
       <Routes>
-        <Route to="/" elemen={LoginView} />
+        <Route to="/" element={LoginView} />
+        {/* <Route to ="/contacts" element={}  */}
       </Routes>
     </div>
   );

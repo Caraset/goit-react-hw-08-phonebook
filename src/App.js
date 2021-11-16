@@ -1,4 +1,5 @@
 import './App.css';
+import { useSelector } from 'react-redux';
 // import Container from 'components/Container';
 import { Container } from '@mui/material';
 import Form from 'components/Form';
@@ -7,14 +8,18 @@ import Contacts from 'components/Contacts';
 
 import { ToastContainer } from 'react-toastify';
 
-import { Route, Routes } from 'react-router';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import AuthView from 'views/AuthView';
+import ContactsView from 'views/ContactsView';
+import { useLoginUserMutation } from 'redux/phonebook';
+import { getToken } from 'redux/selectors';
 
 function App() {
   return (
     <>
       <Container sx={{ display: 'inline-block' }} fixed>
         <Routes>
+          <Route path="/contacts" element={<ContactsView />} />
           <Route path="/*" element={<AuthView />} />
         </Routes>
       </Container>

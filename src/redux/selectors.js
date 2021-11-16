@@ -2,6 +2,7 @@ import { contactsApi } from './phonebook';
 
 export const getContacts = contactsApi.endpoints.getAllContacts.select();
 export const getFilter = state => state.filter;
+export const getToken = state => state.auth.token;
 
 export const getFilteredContacts = (state, contacts) => {
   const filter = getFilter(state);
