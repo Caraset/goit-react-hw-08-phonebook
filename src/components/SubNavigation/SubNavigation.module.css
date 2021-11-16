@@ -1,0 +1,26 @@
+.subNavigationContainer {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.subLink {
+  text-decoration: none;
+  color: #000;
+
+  font-family: Roboto;
+}
+
+/* .subLinkActive {
+  composes: subLink;
+  color: var(--main-color);
+} */
+
+.active {
+  /* composes: subLink; */
+  color: var(--main-color);
+}
+
+.subLink:not(:last-child) {
+  margin-right: 10px;
+}

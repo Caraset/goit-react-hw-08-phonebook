@@ -3,7 +3,7 @@
   text-align: center;
 }
 
-.app__title {
+/* .app__title {
   margin-top: 20px;
   text-align: center;
   margin-bottom: 15px;
@@ -67,4 +67,26 @@
 .bottom-curve-gen {
   margin: 0;
   padding: 0;
+} */
+
+.formContainer {
+  /* mx: 'auto',
+        marginTop: '100px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '500px',
+        width: '500px',
+        backgroundColor: '#ff0000', */
+  position: relative;
+  margin: 100px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+  width: 500px;
+  border: 1px solid #000;
+  background-color: #fff;
+  border-radius: 20px;
 }
