@@ -71,7 +71,7 @@ export default function ContactForm() {
     e.preventDefault();
 
     const contact = {
-      name,
+      name: name.toLowerCase(),
       number,
     };
 

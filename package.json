@@ -1,8 +1,7 @@
 {
-  "name": "goit-react-hw-07-phonebook",
+  "name": "goit-react-hw-08-phonebook",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://caraset.github.io/goit-react-hw-07-phonebook/",
   "dependencies": {
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
@@ -12,8 +11,6 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "axios": "^0.24.0",
-    "gh-pages": "^3.2.3",
     "notistack": "^2.0.3",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
