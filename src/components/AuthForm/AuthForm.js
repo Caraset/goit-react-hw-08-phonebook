@@ -1,12 +1,9 @@
-import { Box, Typography, TextField, Button } from '@mui/material/';
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-
-import s from './AuthForm.module.css';
-
-import { useRegisterUserMutation, useLoginUserMutation } from 'redux/phonebook';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setCredentials } from 'redux/authSlice';
+import { useLocation } from 'react-router-dom';
+import { useRegisterUserMutation, useLoginUserMutation } from 'redux/phonebook';
+import { setCredentials } from 'redux/auth/authSlice';
+import { Box, Typography, TextField, Button } from '@mui/material/';
 
 export default function AuthForm() {
   const [name, setName] = useState('');
@@ -23,6 +20,10 @@ export default function AuthForm() {
 
   const location = useLocation();
 
+  useEffect(() => {
+    reset();
+  }, [location]);
+
   const validateUser = () => {
     const validationEmailExp =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -31,18 +32,21 @@ export default function AuthForm() {
 
     let passedValidation = true;
 
-    if (!emailChek) {
+    if (email === '') {
+      setEmailError('Enter email');
+      passedValidation = false;
+    } else if (!emailChek) {
       setEmailError(
         'Invalid email address. Valid e-mail can contain only latin letters, numbers, @ and .',
       );
       passedValidation = false;
-    } else if (email === '') {
-      setEmailError('Enter email');
-      passedValidation = false;
     }
 
     if (password === '') {
-      setPasswordError('empty');
+      setPasswordError('Enter password');
+      passedValidation = false;
+    } else if (password.length < 7) {
+      setPasswordError('Password too short');
       passedValidation = false;
     }
 
@@ -51,38 +55,11 @@ export default function AuthForm() {
     }
 
     if (name === '') {
-      setNameError('empty');
+      setNameError('Enter name');
       passedValidation = false;
     }
 
     return passedValidation;
-
-    // switch (true) {
-    //   case email === '' && password === '':
-    //     setEmailError('Enter email');
-    //     setPasswordError('empty');
-    //     return 'failed';
-    //   case password === '' && !emailChek:
-    //     setPasswordError('empty');
-    //     setEmailError(
-    //       'Invalid email address. Valid e-mail can contain only latin letters, numbers, @ and .',
-    //     );
-    //     return 'failed';
-    //   case email === '':
-    //     setEmailError('empty');
-    //     return;
-    //   case password === '':
-    //     setPasswordError('empty');
-    //     return 'failed';
-
-    //   case !emailChek:
-    //     setEmailError(
-    //       'Invalid email address. Valid e-mail can contain only latin letters, numbers, @ and .',
-    //     );
-    //     return 'failed';
-    //   default:
-    //     return true;
-    // }
   };
 
   const submit = e => {
@@ -93,9 +70,7 @@ export default function AuthForm() {
     if (validationResult === false) {
       return;
     } else {
-      loginUser({ email, password }).then(({ data }) =>
-        dispatch(setCredentials(data)),
-      );
+      loginUser({ email, password });
       reset();
     }
   };
@@ -108,9 +83,10 @@ export default function AuthForm() {
     if (validationResult === false) {
       return;
     } else {
-      registerUser({ email, password, name }).then(({ data }) =>
-        dispatch(setCredentials(data)),
-      );
+      console.log({ email, password, name });
+      registerUser({ email, password, name })
+        .then(({ data }) => dispatch(setCredentials(data)))
+        .catch(r => console.log(r));
       reset();
     }
   };
@@ -131,14 +107,13 @@ export default function AuthForm() {
       <Box
         component="form"
         noValidate
-        className={s.form}
         onSubmit={location.pathname === '/login' ? submit : submitRegistration}
+        sx={{ display: 'flex', flexDirection: 'column', width: '400px' }}
       >
         {location.pathname === '/registration' && (
           <TextField
             margin="normal"
             required
-            // fullWidth
             id="name"
             label="Name"
             name="name"
@@ -155,13 +130,11 @@ export default function AuthForm() {
         <TextField
           margin="normal"
           required
-          // fullWidth
           id="email"
           label="Email Address"
           name="email"
           type="email"
           autoComplete="email"
-          // autoFocus
           value={email}
           onChange={({ target }) => {
             setEmail(target.value);
@@ -174,7 +147,6 @@ export default function AuthForm() {
         <TextField
           margin="normal"
           required
-          // fullWidth
           name="password"
           label="Password"
           type="password"

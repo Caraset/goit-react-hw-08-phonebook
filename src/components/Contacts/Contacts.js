@@ -1,7 +1,5 @@
 import Loader from 'react-loader-spinner';
-
-import './Contacts.css';
-
+import { Box, Typography } from '@mui/material';
 import { useGetAllContactsQuery } from 'redux/phonebook';
 import ContactsList from './ContactsList';
 
@@ -9,20 +7,18 @@ export default function Contacts() {
   const { data: contacts = [], isFetching } = useGetAllContactsQuery();
 
   return (
-    <>
+    <Box sx={{ ml: '15px', width: '500px' }}>
       {isFetching ? (
-        <div className="loader-container">
-          <Loader type="ThreeDots" color="#be26cc" height={100} width={100} />
-        </div>
+        <Loader type="ThreeDots" color="#be26cc" height={100} width={100} />
       ) : (
         <>
           {contacts.length === 0 ? (
-            <p className="contacts__nothingText">No contacts added</p>
+            <Typography sx={{ fontSize: '20px' }}>No contacts added</Typography>
           ) : (
             <ContactsList contacts={contacts} />
           )}
         </>
       )}
-    </>
+    </Box>
   );
 }

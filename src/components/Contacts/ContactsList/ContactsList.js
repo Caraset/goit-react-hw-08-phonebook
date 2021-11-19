@@ -1,31 +1,28 @@
 import { useSelector } from 'react-redux';
-import { useDeleteContactMutation } from 'redux/phonebook';
-import { getFilteredContacts } from 'redux/selectors';
+import { PropTypes } from 'prop-types';
 
-import './ContactsList.css';
-import DeleteBtn from './DeleteBtn';
+import { getFilteredContacts } from 'redux/selectors';
+import { List, Typography } from '@mui/material';
+import ContactsItem from './ContactsItem';
 
 export default function ContactsList({ contacts }) {
   const filteredContacts = useSelector(state =>
     getFilteredContacts(state, contacts),
   );
 
-  const [deleteContact] = useDeleteContactMutation();
-
   return (
-    <ul className="contacts__list">
+    <List sx={{ ml: '15px', width: '500px' }} dense={false}>
       {filteredContacts.length === 0 ? (
-        <p className="contacts__nothingText">Nothing found</p>
+        <Typography sx={{ fontSize: '20px' }}>Nothing found</Typography>
       ) : (
         filteredContacts.map(contact => (
-          <li className="contacts__item" key={contact.id}>
-            <span className="contacts__name">{contact.name}</span>
-            <span className="dots"></span>
-            <span className="contacts__number">{contact.number}</span>
-            <DeleteBtn deleteContact={() => deleteContact(contact.id)} />
-          </li>
+          <ContactsItem key={contact.id} contact={{ ...contact }} />
         ))
       )}
-    </ul>
+    </List>
   );
 }
+
+ContactsList.propTypes = {
+  contacts: PropTypes.arrayOf(PropTypes.object),
+};

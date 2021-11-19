@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { Box, Typography, TextField } from '@mui/material';
 
-import './Filter.css';
 import * as actions from 'redux/actions';
 import { getFilter } from 'redux/selectors';
 
@@ -11,15 +11,18 @@ export default function Filter() {
   const setFilter = e => dispatch(actions.changeFilter(e.target.value));
 
   return (
-    <div className="filter">
-      <span className="filter__text">Find contacts by name</span>
-      <input
-        className="filter__input"
+    <Box>
+      <Typography component="h3" variant="h4">
+        Find contacts by name
+      </Typography>
+      <TextField
+        margin="normal"
         type="text"
         name="filter"
         onChange={setFilter}
         value={filterValue}
+        sx={{ width: '400px' }}
       />
-    </div>
+    </Box>
   );
 }

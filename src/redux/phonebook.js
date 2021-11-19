@@ -1,53 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { setCredentials, setUser, clearCredentials } from './auth/authSlice';
 
-// const URL = 'https://618eb91150e24d0017ce1407.mockapi.io';
 const URL = 'https://connections-api.herokuapp.com';
-
-// export const contactsApi = createApi({
-//   reducerPath: 'contacts',
-
-//   baseQuery: fetchBaseQuery({
-//     baseUrl: URL,
-//     // prepareHeaders: (headers, { getState }) => {
-//     //   const token = getState().auth.token;
-
-//     //   // If we have a token set in state, let's assume that we should be passing it.
-//     //   if (token) {
-//     //     headers.set('authorization', `Bearer ${token}`);
-//     //   }
-
-//     //   return headers;
-//     // },
-//   }),
-//   tagTypes: ['contacts'],
-//   endpoints: builder => ({
-//     getAllContacts: builder.query({
-//       query: () => `/contacts`,
-//       providesTags: ['contacts'],
-//     }),
-//     deleteContact: builder.mutation({
-//       query: contactId => ({
-//         url: `/contacts/${contactId}`,
-//         method: 'DELETE',
-//       }),
-//       invalidatesTags: ['contacts'],
-//     }),
-//     addContact: builder.mutation({
-//       query: contact => ({
-//         url: `/contacts`,
-//         method: 'POST',
-//         body: contact,
-//       }),
-//       invalidatesTags: ['contacts'],
-//     }),
-//   }),
-// });
-
-// export const {
-//   useGetAllContactsQuery,
-//   useAddContactMutation,
-//   useDeleteContactMutation,
-// } = contactsApi;
 
 export const contactsApi = createApi({
   reducerPath: 'api',
@@ -57,7 +11,6 @@ export const contactsApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
 
-      // If we have a token set in state, let's assume that we should be passing it.
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       }
@@ -65,11 +18,27 @@ export const contactsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['contacts'],
+  tagTypes: ['contacts', 'user'],
   endpoints: builder => ({
     getAllContacts: builder.query({
       query: () => `/contacts`,
       providesTags: ['contacts'],
+    }),
+    getCurrentUser: builder.query({
+      async queryFn(__, queryApi, _, baseQuery) {
+        const persistedToken = queryApi.getState().auth.token;
+        if (persistedToken === null) {
+          return { data: 'no token' };
+        }
+        try {
+          const respons = await baseQuery('/users/current');
+          queryApi.dispatch(setUser(respons.data));
+          return respons;
+        } catch (error) {
+          return { data: error };
+        }
+      },
+      providesTags: ['user'],
     }),
     deleteContact: builder.mutation({
       query: contactId => ({
@@ -99,19 +68,31 @@ export const contactsApi = createApi({
         method: 'POST',
         body: user,
       }),
-      // transformResponse: response => response.data,
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        const respons = await queryFulfilled;
+
+        dispatch(setCredentials(respons.data));
+      },
+    }),
+    logOutUser: builder.mutation({
+      query: () => ({
+        url: '/users/logout',
+        method: 'POST',
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(clearCredentials());
+      },
     }),
   }),
 });
 
 export const {
   useGetAllContactsQuery,
+  useGetCurrentUserQuery,
   useAddContactMutation,
   useDeleteContactMutation,
   useRegisterUserMutation,
   useLoginUserMutation,
+  useLogOutUserMutation,
 } = contactsApi;
-
-// name: Qwer Qwerty
-// email: qwerty@qwer.qw
-// password: qwerty12

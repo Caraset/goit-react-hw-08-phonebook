@@ -1,3 +1,4 @@
+import { Box, Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
 import s from './SubNavigation.module.css';
@@ -5,14 +6,14 @@ import s from './SubNavigation.module.css';
 export default function SubNavigation() {
   const activeClass = [s.subLink, s.active];
   return (
-    <div className={s.subNavigationContainer}>
+    <Box sx={{ display: 'inline-flex' }}>
       <NavLink
         to="login"
         className={({ isActive }) =>
           isActive ? activeClass.join(' ') : s.subLink
         }
       >
-        Login
+        <Typography sx={{ color: 'primary.contrastText' }}>Login</Typography>
       </NavLink>
       <NavLink
         to="registration"
@@ -20,8 +21,10 @@ export default function SubNavigation() {
           isActive ? activeClass.join(' ') : s.subLink
         }
       >
-        Registration
+        <Typography sx={{ color: 'primary.contrastText' }}>
+          Registration
+        </Typography>
       </NavLink>
-    </div>
+    </Box>
   );
 }
