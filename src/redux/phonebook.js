@@ -23,6 +23,7 @@ export const contactsApi = createApi({
     getAllContacts: builder.query({
       query: () => `/contacts`,
       providesTags: ['contacts'],
+      keepUnusedDataFor: 10,
     }),
     getCurrentUser: builder.query({
       async queryFn(__, queryApi, _, baseQuery) {
@@ -61,6 +62,7 @@ export const contactsApi = createApi({
         method: 'POST',
         body: user,
       }),
+      invalidatesTags: ['contacts'],
     }),
     loginUser: builder.mutation({
       query: user => ({
@@ -69,10 +71,15 @@ export const contactsApi = createApi({
         body: user,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        const respons = await queryFulfilled;
+        try {
+          const respons = await queryFulfilled;
 
-        dispatch(setCredentials(respons.data));
+          dispatch(setCredentials(respons.data));
+        } catch ({ error }) {
+          return error.status;
+        }
       },
+      invalidatesTags: ['contacts'],
     }),
     logOutUser: builder.mutation({
       query: () => ({

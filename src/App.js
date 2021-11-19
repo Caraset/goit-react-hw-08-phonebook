@@ -20,7 +20,7 @@ function App() {
           <>
             <Routes>
               <Route
-                path="/contacts"
+                path="contacts"
                 element={
                   <PrivateRoute>
                     <ContactsView />
@@ -29,7 +29,7 @@ function App() {
               />
 
               <Route
-                path="/*"
+                path="*"
                 element={
                   <PublicRoute restricted={true}>
                     <AuthView />

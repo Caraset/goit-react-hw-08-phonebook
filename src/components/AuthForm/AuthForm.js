@@ -16,7 +16,7 @@ export default function AuthForm() {
   const dispatch = useDispatch();
 
   const [registerUser] = useRegisterUserMutation();
-  const [loginUser] = useLoginUserMutation();
+  const [loginUser, { error }] = useLoginUserMutation();
 
   const location = useLocation();
 
@@ -83,7 +83,6 @@ export default function AuthForm() {
     if (validationResult === false) {
       return;
     } else {
-      console.log({ email, password, name });
       registerUser({ email, password, name })
         .then(({ data }) => dispatch(setCredentials(data)))
         .catch(r => console.log(r));
@@ -163,6 +162,11 @@ export default function AuthForm() {
         <Button variant="contained" type="submit" sx={{ marginTop: '50px' }}>
           {location.pathname === '/login' ? 'Sign in' : 'Submit'}
         </Button>
+        {error?.status === 400 && (
+          <Typography sx={{ color: '#ff0000', mt: '10px' }}>
+            User not found or password incorect
+          </Typography>
+        )}
       </Box>
     </>
   );
